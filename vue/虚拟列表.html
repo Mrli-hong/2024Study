@@ -1,0 +1,44 @@
+<template>
+    <div id="app">
+        <virtualList :listData="data" />
+    </div>
+</template>
+
+<!-- 导入映射表 -->
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+</script>
+
+<script type="module">
+    import { ref } from 'vue';
+    import virtualList from './components/virtualList.vue';
+
+
+
+    createApp({
+        setup() {
+            // 数据源
+            const data = ref([])
+
+            for (let i = 0; i < 1000; i++) {
+                data.value.push({ id: i, value: i })
+            }
+            return {
+                data
+            }
+        },
+    }).mount('#app')
+
+</script>
+
+<style lang="css">
+    .app {
+        width: 300px;
+        height: 400px;
+        border: 1px solid #000;
+    }
+</style>

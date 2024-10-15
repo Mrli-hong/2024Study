@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <ul id="container">
+
+        </ul>
+    </div>
+</body>
+
+<!-- 导入映射表 -->
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+</script>
+
+<script type="module">
+
+    import { createApp, onMounted } from 'vue'
+
+    createApp({
+        setup() {
+            let ul;
+            const fragment = document.createDocumentFragment();
+
+            const total = 100000        // 总数据条数
+            const once = 20             // 每次渲染条数
+            let index = 0               // 当前渲染的索引
+
+            // 两个参数：剩余需要渲染的数据条数，当前渲染的索引
+            function loop(curTotal, curIndex) {
+                const pageCount = Math.min(once, curTotal)
+
+                requestAnimationFrame(() => {
+                    for (let i = 0; i < pageCount; i++) {
+                        let li = document.createElement('li')
+                        li.innerText = curIndex + i + ':' + ~~(Math.random() * total)
+                        fragment.appendChild(li)
+                    }
+                    ul.appendChild(fragment)
+                    // 递归调用
+                    if (curTotal > 0) {
+                        loop(curTotal - pageCount, curIndex + pageCount)
+                    }
+                })
+            }
+
+            onMounted(() => {
+                // 确保在挂载完成后获取 ul 元素
+                ul = document.getElementById('container')
+                // 启动渲染
+                loop(total, index)
+            })
+
+            return {}
+        },
+    }).mount('#app')
+
+</script>
+
+</html>
