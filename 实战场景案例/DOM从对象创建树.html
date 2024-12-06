@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container"></div>
+</body>
+<script>
+    const data = {
+        "Fish": {
+            "trout": {},
+            "salmon": {
+                "b": {},
+                "c": {}
+            },
+            "a": {}
+        },
+
+        "Tree": {
+            "Huge": {
+                "sequoia": {},
+                "oak": {}
+            },
+            "Flowering": {
+                "apple tree": {},
+                "magnolia": {}
+            }
+        }
+    };
+
+    const container = document.querySelector('#container')
+    function createDOMTree(obj) {
+        if (!Object.keys(obj).length) return ''
+
+        const documentFragment = new DocumentFragment()
+        const ul = document.createElement('ul')
+
+        Object.keys(obj).forEach(key => {
+            const li = document.createElement('li')
+            li.innerHTML = key
+            documentFragment.append(li)
+            const childrenDomTree = createDOMTree(obj[key])
+            childrenDomTree && li.append(childrenDomTree)
+        })
+
+        ul.append(documentFragment)
+        return ul
+    }
+    function createTree(container, data) {
+        container.append(createDOMTree(data))
+    }
+
+    createTree(container, data); // 将树创建在 container 中
+
+    function updateUlNumbers(ele) {
+        console.log(1)
+        const lis = ele.children
+        let SUM = 0
+        for (const li of lis) {
+            if (li.children.length) {
+                const childrenNums = updateUlNumbers(li.children[0])
+                SUM += childrenNums
+                li.firstChild.textContent += `[${childrenNums}]`
+            } else {
+                SUM++
+            }
+        }
+        return SUM
+    }
+    updateUlNumbers(container.children[0])
+</script>
+
+</html>

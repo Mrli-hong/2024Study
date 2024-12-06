@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+</body>
+
+<script>
+    const container = document.querySelector("#container");
+
+    function createCalendar(elem, year, month) {
+        const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const firstDay = new Date(year, month - 1, 1).getDay(); // 获取本月第一天是星期几
+        const totalDays = new Date(year, month, 0).getDate(); // 获取本月总天数
+        const blankDays = (firstDay + 6) % 7; // 计算空白天数（周日调整为 6，其他顺序保持）
+
+        const table = document.createElement('table');
+        const headerRow = document.createElement('tr');
+
+        // 创建表头
+        weekdays.forEach(day => {
+            const th = document.createElement('th');
+            th.textContent = day;
+            headerRow.appendChild(th);
+        });
+        table.appendChild(headerRow);
+
+        // 渲染日期
+        let day = 1;
+        while (day <= totalDays) {
+            const row = document.createElement('tr');
+            table.appendChild(row);
+            for (let i = 0; i < 7; i++) {
+                const cell = document.createElement('td');
+
+                if ((row.rowIndex === 1 && i < blankDays) || day > totalDays) {
+                    // 第一行的空白或超出总天数的单元格
+                    cell.textContent = '';
+                } else {
+                    cell.textContent = day++;
+                }
+
+                row.appendChild(cell);
+            }
+
+        }
+
+        // 添加表格到容器
+        elem.appendChild(table);
+    }
+
+    createCalendar(container, 2012, 9);
+</script>
+
+</html>
